@@ -1,25 +1,25 @@
 ---
-title: "You.com search tool"
-description: "Integrate with the You.com search tool using LangChain JavaScript."
+title: "You.com search tools"
+description: "Integrate with the You.com search tools using LangChain JavaScript."
 ---
 
-The [You.com API](https://api.you.com) provides real-time web search and content extraction designed for LLM applications.
+The `@youdotcom-oss/langchain` package provides three `DynamicStructuredTool` instances for web search and content extraction, built for LangChain.js agents.
 
 ## Setup
 
-For TypeScript and JavaScript projects, use the official `@youdotcom-oss/sdk` package. Install it with your preferred package manager:
+Install the package with your preferred package manager:
 
 <CodeGroup>
 ```bash npm
-npm install @youdotcom-oss/sdk
+npm install @youdotcom-oss/langchain
 ```
 
 ```bash yarn
-yarn add @youdotcom-oss/sdk
+yarn add @youdotcom-oss/langchain
 ```
 
 ```bash pnpm
-pnpm add @youdotcom-oss/sdk
+pnpm add @youdotcom-oss/langchain
 ```
 </CodeGroup>
 
@@ -29,42 +29,62 @@ Set your You.com API key. Get your API key at [you.com/platform](https://you.com
 process.env.YDC_API_KEY = "your-api-key";
 ```
 
-## Usage
+## Available tools
+
+### `youSearch`
+
+Web and news search with advanced filtering (dates, sites, file types).
 
 ```typescript
-import { You } from "@youdotcom-oss/sdk";
+import { youSearch } from "@youdotcom-oss/langchain";
 
-const you = new You({ apiKeyAuth: process.env.YDC_API_KEY });
-
-const results = await you.search({ query: "latest AI developments" });
-console.log(results);
+const searchTool = youSearch({ apiKey: process.env.YDC_API_KEY });
+const result = await searchTool.invoke({ query: "latest AI developments", count: 5 });
 ```
 
-You can also apply filters like `freshness`, `count`, and `country` to narrow results:
+### `youResearch`
+
+Comprehensive answers with cited sources. Supports configurable effort levels: `lite`, `standard`, `deep`, and `exhaustive`.
 
 ```typescript
-import { You } from "@youdotcom-oss/sdk";
-import { Freshness, Country } from "@youdotcom-oss/sdk/models";
+import { youResearch } from "@youdotcom-oss/langchain";
 
-const you = new You({ apiKeyAuth: process.env.YDC_API_KEY });
+const researchTool = youResearch({ apiKey: process.env.YDC_API_KEY });
+const result = await researchTool.invoke({ query: "WebAssembly vs JavaScript performance" });
+```
 
-const results = await you.search({
-  query: "renewable energy",
-  count: 10,
-  freshness: Freshness.Week,
-  country: Country.Us,
+### `youContents`
+
+Extract full page content from URLs in markdown or HTML format.
+
+```typescript
+import { youContents } from "@youdotcom-oss/langchain";
+
+const contentsTool = youContents({ apiKey: process.env.YDC_API_KEY });
+const result = await contentsTool.invoke({ urls: ["https://example.com/article"] });
+```
+
+## Use with an agent
+
+```typescript
+import { createAgent, initChatModel } from "langchain";
+import { youSearch, youResearch, youContents } from "@youdotcom-oss/langchain";
+
+const model = await initChatModel("claude-haiku-4-5", { temperature: 0 });
+
+const agent = createAgent({
+  model,
+  tools: [
+    youSearch(),
+    youResearch(),
+    youContents(),
+  ],
+  systemPrompt: "You are a helpful research assistant. Always cite your sources.",
+});
+
+const result = await agent.invoke({
+  messages: [{ role: "user", content: "What are the latest developments in AI?" }],
 });
 ```
 
-## LangChain.js community integration
-
-You.com is also available via the LangChain.js community package:
-
-```typescript
-import { YouSearch } from "langchain/tools";
-
-const tool = new YouSearch();
-const result = await tool.call("latest AI developments");
-```
-
-For more details, see the [You.com TypeScript SDK documentation](https://you.com/docs/sdks/typescript-sdk).
+For more details, see the [You.com LangChain package README](https://github.com/youdotcom-oss/dx-toolkit/tree/main/packages/langchain#readme).
