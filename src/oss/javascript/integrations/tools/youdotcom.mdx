@@ -1,0 +1,70 @@
+---
+title: "You.com search tool"
+description: "Integrate with the You.com search tool using LangChain JavaScript."
+---
+
+The [You.com API](https://api.you.com) provides real-time web search and content extraction designed for LLM applications.
+
+## Setup
+
+For TypeScript and JavaScript projects, use the official `@youdotcom-oss/sdk` package. Install it with your preferred package manager:
+
+<CodeGroup>
+```bash npm
+npm install @youdotcom-oss/sdk
+```
+
+```bash yarn
+yarn add @youdotcom-oss/sdk
+```
+
+```bash pnpm
+pnpm add @youdotcom-oss/sdk
+```
+</CodeGroup>
+
+Set your You.com API key. Get your API key at [you.com/platform](https://you.com/platform).
+
+```typescript
+process.env.YDC_API_KEY = "your-api-key";
+```
+
+## Usage
+
+```typescript
+import { You } from "@youdotcom-oss/sdk";
+
+const you = new You({ apiKeyAuth: process.env.YDC_API_KEY });
+
+const results = await you.search({ query: "latest AI developments" });
+console.log(results);
+```
+
+You can also apply filters like `freshness`, `count`, and `country` to narrow results:
+
+```typescript
+import { You } from "@youdotcom-oss/sdk";
+import { Freshness, Country } from "@youdotcom-oss/sdk/models";
+
+const you = new You({ apiKeyAuth: process.env.YDC_API_KEY });
+
+const results = await you.search({
+  query: "renewable energy",
+  count: 10,
+  freshness: Freshness.Week,
+  country: Country.Us,
+});
+```
+
+## LangChain.js community integration
+
+You.com is also available via the LangChain.js community package:
+
+```typescript
+import { YouSearch } from "langchain/tools";
+
+const tool = new YouSearch();
+const result = await tool.call("latest AI developments");
+```
+
+For more details, see the [You.com TypeScript SDK documentation](https://you.com/docs/sdks/typescript-sdk).

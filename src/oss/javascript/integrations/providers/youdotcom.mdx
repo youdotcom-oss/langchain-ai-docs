@@ -1,0 +1,46 @@
+---
+title: "You.com"
+description: "Integrate with You.com using LangChain JavaScript."
+---
+
+[You.com](https://you.com) is an AI productivity platform providing real-time web search and content extraction APIs designed for LLM applications.
+
+## Installation and setup
+
+<CodeGroup>
+```bash npm
+npm install @youdotcom-oss/sdk
+```
+
+```bash yarn
+yarn add @youdotcom-oss/sdk
+```
+
+```bash pnpm
+pnpm add @youdotcom-oss/sdk
+```
+</CodeGroup>
+
+Set your You.com API key. Get your API key at [you.com/platform](https://you.com/platform).
+
+```typescript
+process.env.YDC_API_KEY = "your-api-key";
+```
+
+## Search
+
+See a [usage example](/oss/integrations/tools/youdotcom).
+
+```typescript
+import { You } from "@youdotcom-oss/sdk";
+```
+
+## Retriever
+
+See a [usage example](/oss/integrations/retrievers/youdotcom).
+
+```typescript
+import { YouRetriever } from "langchain/retrievers/you";
+```
+
+For more details, see the [You.com TypeScript SDK documentation](https://you.com/docs/sdks/typescript-sdk).

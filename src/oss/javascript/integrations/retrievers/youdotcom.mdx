@@ -1,0 +1,53 @@
+---
+title: "You.com retriever"
+description: "Integrate with the You.com retriever using LangChain JavaScript."
+---
+
+The [You.com API](https://api.you.com) provides real-time web search designed for LLM and RAG applications.
+
+## Setup
+
+For TypeScript and JavaScript projects, use the official `@youdotcom-oss/sdk` package. Install it with your preferred package manager:
+
+<CodeGroup>
+```bash npm
+npm install @youdotcom-oss/sdk
+```
+
+```bash yarn
+yarn add @youdotcom-oss/sdk
+```
+
+```bash pnpm
+pnpm add @youdotcom-oss/sdk
+```
+</CodeGroup>
+
+Set your You.com API key. Get your API key at [you.com/platform](https://you.com/platform).
+
+```typescript
+process.env.YDC_API_KEY = "your-api-key";
+```
+
+## Usage with the TypeScript SDK
+
+```typescript
+import { You } from "@youdotcom-oss/sdk";
+
+const you = new You({ apiKeyAuth: process.env.YDC_API_KEY });
+
+const results = await you.search({ query: "climate change policy updates", count: 5 });
+```
+
+## LangChain.js community retriever
+
+You.com is available as a retriever via the LangChain.js community package:
+
+```typescript
+import { YouRetriever } from "langchain/retrievers/you";
+
+const retriever = new YouRetriever({ k: 5 });
+const docs = await retriever.getRelevantDocuments("climate change policy updates");
+```
+
+For more details, see the [You.com TypeScript SDK documentation](https://you.com/docs/sdks/typescript-sdk).
