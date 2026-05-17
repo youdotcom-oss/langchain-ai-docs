@@ -615,7 +615,6 @@ packages:
   downloads_updated_at: "2026-05-11T00:21:45.679408+00:00"
 - name: langchain-youdotcom
   name_title: "You.com"
-  highlight: true
   repo: youdotcom-oss/langchain-youdotcom
   provider_page: you
   js: "@youdotcom-oss/langchain"
